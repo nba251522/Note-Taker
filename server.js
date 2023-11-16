@@ -25,7 +25,8 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
     const newNote = req.body; 
-  
+    newNote.id = Date.now().toString();
+    
     fs.readFile(path.join(__dirname, './db/db.json'), 'utf8', (err, data) => {
       if (err) {
         console.error(err);
