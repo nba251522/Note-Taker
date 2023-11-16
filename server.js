@@ -22,3 +22,24 @@ app.get('/api/notes', (req, res) => {
     res.json(JSON.parse(data));
   });
 });
+
+app.post('/api/notes', (req, res) => {
+    const newNote = req.body; 
+  
+    fs.readFile(path.join(__dirname, './db/db.json'), 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error reading notes" });
+      }
+      const notes = JSON.parse(data);
+      notes.push(newNote);
+  
+      fs.writeFile(path.join(__dirname, './db/db.json'), JSON.stringify(notes), (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: "Error writing new note" });
+        }
+        res.json(newNote);
+      });
+    });
+  });
